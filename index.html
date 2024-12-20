@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Click the Box Game</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        #game-container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            background-color: #fff;
+            border: 2px solid #ccc;
+            overflow: hidden;
+        }
+
+        .box {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-color: #ff5722;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #score {
+            margin-top: 20px;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <div id="game-container"></div>
+        <div id="score">Score: 0</div>
+    </div>
+
+    <script>
+        const gameContainer = document.getElementById('game-container');
+        const scoreDisplay = document.getElementById('score');
+        let score = 0;
+        let gameInterval;
+
+        function randomPosition() {
+            const x = Math.random() * (gameContainer.offsetWidth - 50);
+            const y = Math.random() * (gameContainer.offsetHeight - 50);
+            return { x, y };
+        }
+
+        function createBox() {
+            const box = document.createElement('div');
+            box.classList.add('box');
+            const { x, y } = randomPosition();
+            box.style.left = `${x}px`;
+            box.style.top = `${y}px`;
+
+            box.addEventListener('click', () => {
+                score++;
+                scoreDisplay.textContent = `Score: ${score}`;
+                box.remove();
+            });
+
+            gameContainer.appendChild(box);
+
+            setTimeout(() => {
+                if (box.parentElement) {
+                    box.remove();
+                }
+            }, 1000);
+        }
+
+        function startGame() {
+            score = 0;
+            scoreDisplay.textContent = 'Score: 0';
+            gameInterval = setInterval(createBox, 1000);
+
+            setTimeout(() => {
+                clearInterval(gameInterval);
+                alert(`Game Over! Your final score is ${score}`);
+            }, 30000); // 30 seconds
+        }
+
+        // Start the game when the page loads
+        window.onload = startGame;
+    </script>
+</body>
+</html>
